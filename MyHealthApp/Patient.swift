@@ -11,8 +11,8 @@ enum PatientError: Error {
     case duplicateMedication
 }
 
-class Patient {
-    let medicalRecordNumber: Int
+struct Patient {
+	let medicalRecordNumber: UUID = UUID()
     let firstName: String
     let lastName: String
     let dateOfBirth: Date
@@ -20,11 +20,8 @@ class Patient {
     var weight: Measurement<UnitMass>
     let bloodType: BloodType
     var medications: [String: Medication]
-    
+	
     let age: Int
-    
-    /// The medical record number assigned to each patient, ensuring that each is unique
-    static var recordNumbers: Int = 0
     
     init(firstName: String,
          lastName: String,
@@ -34,9 +31,6 @@ class Patient {
          bloodType: BloodType,
          medications: [Medication])
     {
-        self.medicalRecordNumber = Patient.recordNumbers
-        Patient.recordNumbers += 1
-        
         self.firstName = firstName
         self.lastName = lastName
         self.dateOfBirth = dateOfBirth
@@ -50,7 +44,7 @@ class Patient {
         }
         
         self.medications = medicationsMap
-        self.age = Calendar.current.dateComponents([.year], from: dateOfBirth, to: .now).year
+        self.age = Calendar.current.dateComponents([.year], from: dateOfBirth, to: .now).year!
     }
     
     /// Returns the patient's full name and age in years
@@ -62,6 +56,7 @@ class Patient {
     
     /// Returns whether or not the patient is currently taking the given medication based on the
     /// date prescribed and the duration for which it was prescribed
+	/// Assumes that the patient begins taking the medication the date it was prescribed
     ///
     /// - Parameter medication: The medication to check
     /// - Returns: `true` if the medication is still being taken, otherwise `false`
@@ -72,7 +67,7 @@ class Patient {
             from: medication.datePrescribed,
             to: today)
         
-        return daysTaken.day! <= medication.duration
+        return daysTaken.day! + 1 <= medication.duration
     }
     
     /// Returns the medications the patient is currently taking, ordered by date prescribed,
@@ -91,7 +86,7 @@ class Patient {
     /// a duplicate is prescribed, the method throws an error.
     ///
     /// - Parameter medication: The medication to prescribe
-    func prescribeMedication(_ medication: Medication) throws {
+    mutating func prescribeMedication(_ medication: Medication) throws {
         /// Avoid prescribing duplicate medications
         guard medications[medication.name] == nil else {
             throw PatientError.duplicateMedication

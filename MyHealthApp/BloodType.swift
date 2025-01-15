@@ -29,25 +29,27 @@ enum BloodType {
     static func compatibleBloodTypes(_ bloodType: BloodType) -> Set<BloodType> {
         BloodType.bloodTypeCompatibility[bloodType] ?? []
     }
-    
-    func simpleDescription() -> String {
-        switch self {
-        case .aPositive:
-            return "A+"
-        case .aNegative:
-            return "A-"
-        case .bPositive:
-            return "B+"
-        case .bNegative:
-            return "B-"
-        case .oPositive:
-            return "O+"
-        case .oNegative:
-            return "O-"
-        case .abPositive:
-            return "AB+"
-        case .abNegative:
-            return "AB-"
-        }
-    }
+}
+
+extension BloodType: CustomStringConvertible {
+	var description: String {
+		switch self {
+		case .aPositive:
+			return "A+"
+		case .aNegative:
+			return "A-"
+		case .bPositive:
+			return "B+"
+		case .bNegative:
+			return "B-"
+		case .oPositive:
+			return "O+"
+		case .oNegative:
+			return "O-"
+		case .abPositive:
+			return "AB+"
+		case .abNegative:
+			return "AB-"
+		}
+	}
 }

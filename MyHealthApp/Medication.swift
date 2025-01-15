@@ -16,7 +16,7 @@ struct Medication {
     let duration: Int
 }
 
-extension Medication: CustomStringConvertible {
+extension Medication: CustomStringConvertible, Equatable {
     var description: String {
         simpleDescription()
     }

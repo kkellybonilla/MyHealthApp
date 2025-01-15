@@ -8,9 +8,18 @@
 import Foundation
 
 extension Date {
-    /// Helper function to create a Date object
-    ///
-    /// - Returns date object with given components if successful, otherwise returns current date
+	private static var _mockNow: Date?
+	
+	static var mockNow: Date? {
+		get { _mockNow }
+		set { _mockNow = newValue }
+	}
+	
+	static var now: Date {
+		mockNow ?? Date()
+	}
+	
+    /// Returns date object with given components if successful, otherwise returns current date
     static func createDateFromComponents(
         calendar: Calendar,
         timeZone: TimeZone? = nil,

@@ -11,7 +11,7 @@
 import Foundation
 
 extension CustomStringConvertible {
-    /// Returns a readable description of a custom type
+    /// Returns readable description of a custom type
     func simpleDescription() -> String {
         var description: String = "("
         let mirror = Mirror(reflecting: self)
@@ -22,6 +22,6 @@ extension CustomStringConvertible {
             }
         }
         
-        return description + ")"
+		return description.dropLast() + ")"
     }
 }
