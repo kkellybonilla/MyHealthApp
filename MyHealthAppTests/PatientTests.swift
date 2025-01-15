@@ -38,7 +38,7 @@ struct PatientTests {
 			height: 6.0 ft
 			weight: 200.0 lb
 			bloodType: B-
-			medications: [:]
+			medications: []
 			age: 25)
 			"""
 		#expect(simpleDescriptionWithoutUUID == expectedDescription)
@@ -96,7 +96,11 @@ struct PatientTests {
 				frequency: 1,
 				duration: 90)
 			
-			let dob = Date.createDateFromComponents(calendar: Calendar.current, year: 2000, month: 1, day: 1)
+			let dob = Date.createDateFromComponents(
+				calendar: Calendar.current,
+				year: 2000,
+				month: 1,
+				day: 1)
 			john = Patient(
 				firstName: "John",
 				lastName: "Doe",
@@ -112,10 +116,9 @@ struct PatientTests {
 						calendar: Calendar.current,
 						year: 2025,
 						month: 1,
-						day: 10
-					)
+						day: 10)
 			
-			john.medications = [metoprolol.name: metoprolol, aspirin.name: aspirin, losartan.name: losartan]
+			john.medications = [metoprolol, aspirin, losartan]
 			let expectedMedications: [Medication] = [metoprolol, aspirin, losartan]
 			#expect(john.currentMedications() == expectedMedications)
 		}
@@ -125,10 +128,9 @@ struct PatientTests {
 						calendar: Calendar.current,
 						year: 2025,
 						month: 4,
-						day: 8
-					)
+						day: 8)
 			
-			john.medications = [losartan.name: losartan]
+			john.medications = [losartan]
 			let expectedMedications: [Medication] = [losartan]
 			#expect(john.currentMedications() == expectedMedications)
 		}
@@ -138,10 +140,9 @@ struct PatientTests {
 						calendar: Calendar.current,
 						year: 2025,
 						month: 1,
-						day: 10
-					)
+						day: 10)
 			
-			john.medications = [losartan.name: losartan, metoprolol.name: metoprolol, aspirin.name: aspirin]
+			john.medications = [losartan, metoprolol, aspirin]
 			let expectedMedications: [Medication] = [metoprolol, aspirin, losartan]
 			#expect(john.currentMedications() == expectedMedications)
 		}
@@ -152,6 +153,12 @@ struct PatientTests {
 		var john: Patient!
 		
 		init() {
+			Date.mockNow = Date.createDateFromComponents(
+						calendar: Calendar.current,
+						year: 2025,
+						month: 1,
+						day: 10)
+			
 			let metoprololDatePrescribed = Date.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2025,
@@ -165,7 +172,11 @@ struct PatientTests {
 				frequency: 1,
 				duration: 90)
 			
-			let dob = Date.createDateFromComponents(calendar: Calendar.current, year: 2000, month: 1, day: 1)
+			let dob = Date.createDateFromComponents(
+				calendar: Calendar.current,
+				year: 2000,
+				month: 1,
+				day: 1)
 			john = Patient(
 				firstName: "John",
 				lastName: "Doe",
@@ -177,16 +188,45 @@ struct PatientTests {
 		}
 		
 		@Test("Prescribes new medication to patient") mutating func prescribeMedicationReturns() {
-			try! john.prescribeMedication(metoprolol)
-			let expectedMedications: [String: Medication] = ["Metoprolol": metoprolol]
+			try? john.prescribeMedication(metoprolol)
+			let expectedMedications = [metoprolol]
 			#expect(john.medications == expectedMedications)
 		}
-		
-		@Test("Throws error when prescribing duplicate medication") mutating func prescribeMedicationThrows() throws {
-			john.medications = [metoprolol.name: metoprolol]
+				
+		@Test("Throws error when prescribing duplicate medication")
+		mutating func prescribeMedicationThrows() throws
+		{
+			john.medications = [metoprolol]
 			#expect(throws: PatientError.duplicateMedication) {
 				try john.prescribeMedication(metoprolol)
 			}
+		}
+		
+		@Test("Prescribes medication to patient if medication was completed")
+		mutating func prescribeMedicationIfCompleted() {
+			let newMetoprololDatePrescribed = Date.createDateFromComponents(
+				calendar: Calendar.current,
+				year: 2025,
+				month: 4,
+				day: 8)
+			let newMetoprolol = Medication(
+				datePrescribed: newMetoprololDatePrescribed,
+				name: "Metoprolol",
+				dose: Measurement(value: 25, unit: UnitMass.milligrams),
+				route: "by mouth",
+				frequency: 1,
+				duration: 90)
+			
+			john.medications = [metoprolol]
+			Date.mockNow = Date.createDateFromComponents(
+						calendar: Calendar.current,
+						year: 2025,
+						month: 4,
+						day: 8)
+			
+			try? john.prescribeMedication(newMetoprolol)
+			let expectedMedications = [metoprolol, newMetoprolol]
+			#expect(john.medications == expectedMedications)
 		}
 	}
 }

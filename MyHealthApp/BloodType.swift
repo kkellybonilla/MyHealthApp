@@ -22,13 +22,9 @@ enum BloodType {
         .abNegative: [.aNegative, .bNegative, .oNegative, .abNegative]
     ]
     
-    /// Returns a set of donor blood types a patient can receive a blood transfusion from
-    ///
-    /// - Parameter bloodType: The blood type to check
-    /// - Returns: A set of compatible blood types
-    static func compatibleBloodTypes(_ bloodType: BloodType) -> Set<BloodType> {
-        BloodType.bloodTypeCompatibility[bloodType] ?? []
-    }
+	var compatibleBloodTypes: Set<BloodType> {
+		BloodType.bloodTypeCompatibility[self] ?? []
+	}
 }
 
 extension BloodType: CustomStringConvertible {

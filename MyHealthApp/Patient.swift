@@ -19,7 +19,7 @@ struct Patient {
     var height: Measurement<UnitLength>
     var weight: Measurement<UnitMass>
     let bloodType: BloodType
-    var medications: [String: Medication]
+    var medications: [Medication]
 	
     let age: Int
     
@@ -37,13 +37,7 @@ struct Patient {
         self.height = height
         self.weight = weight
         self.bloodType = bloodType
-        
-        var medicationsMap: [String: Medication] = [:]
-        for medication in medications {
-            medicationsMap[medication.name] = medication
-        }
-        
-        self.medications = medicationsMap
+        self.medications = medications
         self.age = Calendar.current.dateComponents([.year], from: dateOfBirth, to: .now).year!
     }
     
@@ -76,7 +70,6 @@ struct Patient {
     /// - Returns: A list of medications the patient is currently taking
     func currentMedications() -> [Medication] {
         self.medications
-            .values
             .filter { isCurrentlyTaking($0) }
             .sorted { $0.datePrescribed < $1.datePrescribed }
     }
@@ -87,12 +80,19 @@ struct Patient {
     ///
     /// - Parameter medication: The medication to prescribe
     mutating func prescribeMedication(_ medication: Medication) throws {
-        /// Avoid prescribing duplicate medications
-        guard medications[medication.name] == nil else {
+		var currentMedicationNames: Set<String> = []
+		for medication in self.medications {
+			if self.isCurrentlyTaking(medication) {
+				currentMedicationNames.insert(medication.name)
+			}
+		}
+		
+		/// Avoid prescribing duplicate medications
+		if currentMedicationNames.contains(medication.name) {
             throw PatientError.duplicateMedication
         }
         
-        self.medications[medication.name] = medication
+		self.medications.append(medication)
     }
 }
 
