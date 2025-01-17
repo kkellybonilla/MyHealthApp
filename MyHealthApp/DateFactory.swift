@@ -1,5 +1,5 @@
 //
-//  Date+Utilities.swift
+//  DateFactory.swift
 //  MyHealthApp
 //
 //  Created by Kelly Bonilla Guzman on 1/13/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Date {
+class DateFactory {
 	private static var _mockNow: Date?
 	
 	static var mockNow: Date? {
@@ -16,7 +16,7 @@ extension Date {
 	}
 	
 	static var now: Date {
-		mockNow ?? Date()
+		mockNow ?? .now
 	}
 	
     /// Returns date object with given components if successful, otherwise returns current date
@@ -57,6 +57,6 @@ extension Date {
             yearForWeekOfYear: yearForWeekOfYear)
         
         let date = calendar.date(from: dateComponents)
-        return date ?? Date()
+		return date ?? DateFactory.now
     }
 }

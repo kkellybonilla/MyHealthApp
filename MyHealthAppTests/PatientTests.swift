@@ -10,11 +10,15 @@ import Testing
 
 @testable import MyHealthApp
 
-struct PatientTests {
+@Suite(.serialized) struct PatientTests {
 	var john: Patient
 	
 	init() {
-		let dob = Date.createDateFromComponents(calendar: Calendar.current, year: 2000, month: 1, day: 1)
+		let dob = DateFactory.createDateFromComponents(
+			calendar: Calendar.current,
+			year: 2000,
+			month: 1,
+			day: 1)
 		john = Patient(
 			firstName: "John",
 			lastName: "Doe",
@@ -56,7 +60,7 @@ struct PatientTests {
 		var john: Patient!
 		
 		init() {
-			let metoprololDatePrescribed = Date.createDateFromComponents(
+			let metoprololDatePrescribed = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2025,
 				month: 1,
@@ -69,7 +73,7 @@ struct PatientTests {
 				frequency: 1,
 				duration: 90)
 			
-			let aspirinDatePrescribed = Date.createDateFromComponents(
+			let aspirinDatePrescribed = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2025,
 				month: 1,
@@ -82,7 +86,7 @@ struct PatientTests {
 				frequency: 1,
 				duration: 90)
 			
-			let losartanDatePrescribed = Date.createDateFromComponents(
+			let losartanDatePrescribed = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2025,
 				month: 1,
@@ -96,7 +100,7 @@ struct PatientTests {
 				frequency: 1,
 				duration: 90)
 			
-			let dob = Date.createDateFromComponents(
+			let dob = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2000,
 				month: 1,
@@ -111,8 +115,9 @@ struct PatientTests {
 				medications: [])
 		}
 		
-		@Test("Returns medications the patient is currently taking") mutating func currentMedicationsReturns() {
-			Date.mockNow = Date.createDateFromComponents(
+		@Test("Returns medications the patient is currently taking") mutating func
+		currentMedicationsReturns() {
+			DateFactory.mockNow = DateFactory.createDateFromComponents(
 						calendar: Calendar.current,
 						year: 2025,
 						month: 1,
@@ -124,7 +129,7 @@ struct PatientTests {
 		}
 		
 		@Test("Excludes any completed medications") mutating func currentMedicationsFilters() {
-			Date.mockNow = Date.createDateFromComponents(
+			DateFactory.mockNow = DateFactory.createDateFromComponents(
 						calendar: Calendar.current,
 						year: 2025,
 						month: 4,
@@ -136,7 +141,7 @@ struct PatientTests {
 		}
 		
 		@Test("Orders medications by date prescribed") mutating func currentMedicationsSorts() {
-			Date.mockNow = Date.createDateFromComponents(
+			DateFactory.mockNow = DateFactory.createDateFromComponents(
 						calendar: Calendar.current,
 						year: 2025,
 						month: 1,
@@ -153,13 +158,13 @@ struct PatientTests {
 		var john: Patient!
 		
 		init() {
-			Date.mockNow = Date.createDateFromComponents(
+			DateFactory.mockNow = DateFactory.createDateFromComponents(
 						calendar: Calendar.current,
 						year: 2025,
 						month: 1,
 						day: 10)
 			
-			let metoprololDatePrescribed = Date.createDateFromComponents(
+			let metoprololDatePrescribed = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2025,
 				month: 1,
@@ -172,7 +177,7 @@ struct PatientTests {
 				frequency: 1,
 				duration: 90)
 			
-			let dob = Date.createDateFromComponents(
+			let dob = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2000,
 				month: 1,
@@ -204,7 +209,7 @@ struct PatientTests {
 		
 		@Test("Prescribes medication to patient if medication was completed")
 		mutating func prescribeMedicationIfCompleted() {
-			let newMetoprololDatePrescribed = Date.createDateFromComponents(
+			let newMetoprololDatePrescribed = DateFactory.createDateFromComponents(
 				calendar: Calendar.current,
 				year: 2025,
 				month: 4,
@@ -218,7 +223,7 @@ struct PatientTests {
 				duration: 90)
 			
 			john.medications = [metoprolol]
-			Date.mockNow = Date.createDateFromComponents(
+			DateFactory.mockNow = DateFactory.createDateFromComponents(
 						calendar: Calendar.current,
 						year: 2025,
 						month: 4,

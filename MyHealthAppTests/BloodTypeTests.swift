@@ -66,7 +66,7 @@ struct BloodTypeTests {
     }
 	
 	@Test("Return patient's correct blood type compatibility") func testPatientCompatibleBloodTypes() {
-		let dob = Date.createDateFromComponents(
+		let dob = DateFactory.createDateFromComponents(
 			calendar: Calendar.current,
 			year: 2000,
 			month: 1,

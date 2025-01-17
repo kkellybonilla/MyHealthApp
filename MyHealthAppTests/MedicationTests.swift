@@ -13,7 +13,7 @@ import Testing
 struct MedicationTests {
 
 	@Test("Returns readable medication description") func medicationDescriptionTest() {
-		let metoprololDatePrescribed = Date.createDateFromComponents(
+		let metoprololDatePrescribed = DateFactory.createDateFromComponents(
 			calendar: Calendar.current,
 			year: 2025,
 			month: 1,

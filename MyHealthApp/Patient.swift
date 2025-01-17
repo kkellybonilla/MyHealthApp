@@ -38,7 +38,7 @@ struct Patient {
         self.weight = weight
         self.bloodType = bloodType
         self.medications = medications
-        self.age = Calendar.current.dateComponents([.year], from: dateOfBirth, to: .now).year!
+		self.age = Calendar.current.dateComponents([.year], from: dateOfBirth, to: DateFactory.now).year!
     }
     
     /// Returns the patient's full name and age in years
@@ -55,7 +55,7 @@ struct Patient {
     /// - Parameter medication: The medication to check
     /// - Returns: `true` if the medication is still being taken, otherwise `false`
     private func isCurrentlyTaking(_ medication: Medication) -> Bool {
-        let today: Date = .now
+		let today: Date = DateFactory.now
         let daysTaken = Calendar.current.dateComponents(
             [.day],
             from: medication.datePrescribed,
