@@ -7,8 +7,15 @@
 
 import Foundation
 
-enum BloodType {
-    case aPositive, aNegative, bPositive, bNegative, oPositive, oNegative, abPositive, abNegative
+enum BloodType: String, CaseIterable {
+	case aPositive = "A+"
+	case aNegative = "A-"
+	case bPositive = "B+"
+	case bNegative = "B-"
+	case oPositive = "O+"
+	case oNegative = "O-"
+	case abPositive = "AB+"
+	case abNegative = "AB-"
     
     static private let bloodTypeCompatibility: [BloodType: Set<BloodType>] = [
         .aPositive: [.aPositive, .aNegative, .oPositive, .oNegative],

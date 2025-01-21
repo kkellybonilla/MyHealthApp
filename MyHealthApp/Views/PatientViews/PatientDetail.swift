@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct PatientDetail: View {
-	@State private var isShowingFullMRN: Bool = false
+	@State private var isShowingPrescribeMedicationForm: Bool = false
+	@State private var isShowingBloodTransfusionList: Bool = false
+	
 	var patient: Patient
 		
     var body: some View {
@@ -31,6 +33,8 @@ struct PatientDetail: View {
 				.padding(.leading, 25)
 			}
 			.padding(.bottom, 30)
+			.frame(maxWidth: .infinity)
+			.background(Color(.green.opacity(0.5)))
 			
 			List {
 				Section(header: Text("Patient Details")
@@ -71,45 +75,47 @@ struct PatientDetail: View {
 					}
 				}
 				
-				Section {
-					Button(action: {
-						print("Button tapped")
-					}) {
-						HStack {
-							Text("Needs Blood Transfusion")
-							Image(systemName: "syringe")
-						}
-						.frame(maxWidth: .infinity, alignment: .center)
-						.foregroundStyle(.red)
-					}
-					.listRowBackground(Color.red.opacity(0.2))
-					.padding(.vertical, 8)
-				}
-				
-				Section {
-					Button(action: {
-						print("Button tapped")
-					}) {
-						HStack {
-							Text("Prescribe Medication")
-							Image(systemName: "pills")
-						}
-						.frame(maxWidth: .infinity, alignment: .center)
-					}
-					.listRowBackground(Color.blue.opacity(0.2))
-					.padding(.vertical, 8)
-				}
-				
+				Section(content: {
+					PatientDetailButton(
+						isShowing: $isShowingBloodTransfusionList,
+						buttonText: "Get Blood Transfusion",
+						buttonIcon: "syringe",
+						buttonTint: .red
+					)
+					
+					PatientDetailButton(
+						isShowing: $isShowingPrescribeMedicationForm,
+						buttonText: "Prescribe Medication",
+						buttonIcon: "pills",
+						buttonTint: .blue
+					)
+				})
+				.listRowBackground(Color.clear)
+				.listRowSeparator(.hidden)
+				.padding([.leading, .trailing], -20)
+				.sheet(isPresented: $isShowingPrescribeMedicationForm, content: {
+					PrescribeMedicationForm()
+				})
+
 				Section(header:	Text("Current Medications")
 					.font(.headline)) {
-					ForEach(patient.currentMedications()) { medication in
-						NavigationLink {
-							MedicationDetail(medication: medication)
-						} label : {
-							Text(medication.name)
-						}
+						let medications = patient.currentMedications()
+						if medications.isEmpty {
+							Text("This patient is not currently taking any medications.")
+						} else {
+							ForEach(patient.currentMedications()) { medication in
+								NavigationLink {
+									MedicationDetail(medication: medication)
+								} label : {
+									Text(medication.name)
+								}
+							}
 					}
 				}
+			}
+			.scrollContentBackground(.hidden)
+			.background {
+				Color.green.opacity(0.1)
 			}
 		}
     }

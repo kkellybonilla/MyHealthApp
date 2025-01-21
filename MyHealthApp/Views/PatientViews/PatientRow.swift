@@ -12,9 +12,9 @@ struct PatientRow: View {
 	
     var body: some View {
 		HStack {
-			Image(systemName: "person.circle")
+			Image(systemName: "person")
 				.resizable()
-				.frame(width: 50, height: 50)
+				.frame(width: 35, height: 35)
 			VStack(alignment: .leading) {
 				Text(patient.nameAndAge)
 				Text("Medical Record Number: \(patient.medicalRecordNumber)")
@@ -29,6 +29,5 @@ struct PatientRow: View {
 #Preview {
 	Group {
 		PatientRow(patient: patientData[0])
-		PatientRow(patient: patientData[1])
 	}
 }
