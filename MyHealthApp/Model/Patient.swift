@@ -11,42 +11,55 @@ enum PatientError: Error {
     case duplicateMedication
 }
 
-struct Patient {
-	let medicalRecordNumber: UUID = UUID()
-    let firstName: String
-    let lastName: String
-    let dateOfBirth: Date
-    var height: Measurement<UnitLength>
-    var weight: Measurement<UnitMass>
-    let bloodType: BloodType
-    var medications: [Medication]
+struct Patient: Identifiable, Hashable {
+	let id: UUID
+	let medicalRecordNumber: UUID
+	let firstName: String
+	let lastName: String
+	let dateOfBirth: Date
+	var height: Measurement<UnitLength>
+	var weight: Measurement<UnitMass>
+	let bloodType: BloodType
+	var medications: [Medication]
 	
-    let age: Int
-    
-    init(firstName: String,
-         lastName: String,
-         dateOfBirth: Date,
-         height: Measurement<UnitLength>,
-         weight: Measurement<UnitMass>,
-         bloodType: BloodType,
-         medications: [Medication])
-    {
-        self.firstName = firstName
-        self.lastName = lastName
-        self.dateOfBirth = dateOfBirth
-        self.height = height
-        self.weight = weight
-        self.bloodType = bloodType
-        self.medications = medications
-		self.age = Calendar.current.dateComponents([.year], from: dateOfBirth, to: DateFactory.now).year!
-    }
-    
-    /// Returns the patient's full name and age in years
-    ///
-    /// - Returns: A string containing the patient's Last Name, First Name, Age (in years)
-    func nameAndAge() -> String {
-        return "\(lastName), \(firstName) (\(age))"
-    }
+	var age: Int {
+		Calendar.current.dateComponents([.year], from: dateOfBirth, to: DateFactory.now).year!
+	}
+	
+	var nameAndAge: String {
+		"\(lastName), \(firstName) (\(age))"
+	}
+	
+	var initials: String {
+		if firstName.first == nil || lastName.first == nil {
+			return "N/A"
+		}
+		
+		return "\(firstName.first!)\(lastName.first!)"
+	}
+		
+	init(firstName: String,
+		 lastName: String,
+		 dateOfBirth: Date,
+		 height: Measurement<UnitLength>,
+		 weight: Measurement<UnitMass>,
+		 bloodType: BloodType,
+		 medications: [Medication])
+	{
+		self.id = UUID()
+		self.medicalRecordNumber = UUID()
+		self.firstName = firstName
+		self.lastName = lastName
+		self.dateOfBirth = dateOfBirth
+		self.height = height
+		self.weight = weight
+		self.bloodType = bloodType
+		self.medications = medications
+		}
+	
+	func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
     
     /// Returns whether or not the patient is currently taking the given medication based on the
     /// date prescribed and the duration for which it was prescribed

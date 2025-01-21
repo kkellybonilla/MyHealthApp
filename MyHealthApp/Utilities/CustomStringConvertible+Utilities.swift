@@ -13,7 +13,7 @@ import Foundation
 extension CustomStringConvertible {
     /// Returns readable description of a custom type
     func simpleDescription() -> String {
-        var description: String = "("
+        var description: String = ""
         let mirror = Mirror(reflecting: self)
         
         for (propertyName, value) in mirror.children {
@@ -22,6 +22,6 @@ extension CustomStringConvertible {
             }
         }
         
-		return description.dropLast() + ")"
+		return description
     }
 }

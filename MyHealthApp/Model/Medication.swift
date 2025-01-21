@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Medication {
+struct Medication: Identifiable {
+	let id: UUID = UUID()
     let datePrescribed: Date
     let name: String
     let dose: Measurement<UnitMass>

@@ -50,14 +50,14 @@ import Testing
     
     @Test("Returns patient's last name, first name (age)") func testNameAndAge() async {
 		let expectedNameAndAge = "Doe, John (25)"
-		#expect(john.nameAndAge() == expectedNameAndAge)
+		#expect(john.nameAndAge == expectedNameAndAge)
     }
 
 	@Suite("Current Medications Tests") struct CurrentMedicationsTests {
-		var metoprolol: Medication!
-		var aspirin: Medication!
-		var losartan: Medication!
-		var john: Patient!
+		var metoprolol: Medication
+		var aspirin: Medication
+		var losartan: Medication
+		var john: Patient
 		
 		init() {
 			let metoprololDatePrescribed = DateFactory.createDateFromComponents(
@@ -154,8 +154,8 @@ import Testing
 	}
     
 	@Suite("Prescribe Medication Tests") struct PrescribeMedicationTests {
-		var metoprolol: Medication!
-		var john: Patient!
+		var metoprolol: Medication
+		var john: Patient
 		
 		init() {
 			DateFactory.mockNow = DateFactory.createDateFromComponents(
