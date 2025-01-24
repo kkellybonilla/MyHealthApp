@@ -18,6 +18,9 @@ MyHealthApp supports the following functionality:
 ## Demo
 <img src="MyHealthApp.gif" width="400">
 
+## Notes
+With more time, I would've dramatically thinned down my components via decomposition for better readability/style.
+
 ---
 
 **MyHealthApp** is a simple data model for representing a patient’s chart
