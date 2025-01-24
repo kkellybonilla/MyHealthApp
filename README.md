@@ -2,6 +2,24 @@
 
 Submitted by: **Kelly Bonilla Guzmán**
 
+**MyHealthApp** is a representation of a patients' charts in an Electronic Medical Record system.
+
+## Features
+
+MyHealthApp supports the following functionality:
+- Adding a patient and their medical information to the system
+- Viewing a list of patients, sorted by last name
+- Searching a list of patients by last name
+- Viewing patients' medical information and details
+- Viewing patients' blood type compatability with other patients for blood transfusions
+- Viewing patients' current medications, ordered by date prescribed, exlcuding any completed medications
+- Prescribing patients new medications, while avodiing duplicating medications the patient is currently taking
+
+## Demo
+![](MyHealthAppDemo.gif)
+
+---
+
 **MyHealthApp** is a simple data model for representing a patient’s chart
 in an Electronic Medical Record system.
 
