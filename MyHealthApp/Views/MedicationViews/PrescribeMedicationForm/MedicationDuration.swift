@@ -23,5 +23,6 @@ struct MedicationDuration: View {
 }
 
 #Preview {
-	MedicationDuration(duration: .constant(0))
+	@Previewable @State var duration: Int = 0
+	MedicationDuration(duration: $duration)
 }

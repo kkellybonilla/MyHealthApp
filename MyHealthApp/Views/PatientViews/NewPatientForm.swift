@@ -10,14 +10,11 @@ import SwiftUI
 struct NewPatientForm: View {
 	@Bindable var patientList: PatientManager
 	
-	// required
 	@State private var firstName: String = ""
 	@State private var lastName: String = ""
 	@State private var dateOfBirth: Date = DateFactory.now
 	@State private var heightValue: Double = 5.11
 	@State private var weightValue: Double = 160.0
-	
-	// optional
 	@State private var bloodType: BloodType = .aPositive
 
 	@Environment(\.dismiss) var dismiss

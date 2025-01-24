@@ -9,18 +9,18 @@ import Foundation
 import SwiftUI
 
 struct PrescribeMedicationForm: View {
+	@Binding var patient: Patient
+	
+	@Environment(\.dismiss) var dismiss
+	
 	@State private var medicationName: String = ""
 	@State private var doseValue: Double = 0
-	@State private var doseUnit: String = "milligrams"
+	@State private var doseUnit: String = "kilograms"
 	@State private var route: String = ""
 	@State private var frequency: Int = 0
 	@State private var duration: Int = 0
 	@State private var datePrescribed: Date = DateFactory.now
 	@State private var isShowingErrorAlert = false
-	
-	@Binding var patient: Patient
-	
-	@Environment(\.dismiss) var dismiss
 	
 	var body: some View {
 		NavigationView {
@@ -54,7 +54,7 @@ struct PrescribeMedicationForm: View {
 						do {
 							try tryPrescribeMedication()
 						} catch {
-							print("Error meep: \(error)")
+							isShowingErrorAlert = true
 						}
 					}) {
 						Text("Prescribe")
@@ -88,13 +88,9 @@ struct PrescribeMedicationForm: View {
 			route: route,
 			frequency: frequency,
 			duration: duration)
-		
-		do {
-			try patient.prescribeMedication(medication)
-			dismiss()
-		} catch {
-			isShowingErrorAlert = true
-		}
+
+		try patient.prescribeMedication(medication)
+		dismiss()
 	}
 }
 

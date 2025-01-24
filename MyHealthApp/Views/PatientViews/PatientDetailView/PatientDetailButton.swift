@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PatientDetailButton: View {
 	@Binding var activeSheet: PatientDetailSheet?
+	
 	var sheetType: PatientDetailSheet
 	var buttonText: String
 	var buttonIcon: String

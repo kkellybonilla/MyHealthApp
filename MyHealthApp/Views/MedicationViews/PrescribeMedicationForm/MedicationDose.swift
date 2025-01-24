@@ -30,5 +30,7 @@ struct MedicationDose: View {
 }
 
 #Preview {
-	MedicationDose(doseValue: .constant(0), doseUnit: .constant("milligrams"))
+	@Previewable @State var doseValue: Double = 0
+	@Previewable @State var doseUnit: String = "milligrams"
+	MedicationDose(doseValue: $doseValue, doseUnit: $doseUnit)
 }

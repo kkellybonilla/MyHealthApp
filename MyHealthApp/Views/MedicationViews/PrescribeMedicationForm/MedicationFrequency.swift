@@ -23,5 +23,6 @@ struct MedicationFrequency: View {
 }
 
 #Preview {
-	MedicationFrequency(frequency: .constant(0))
+	@Previewable @State var frequency: Int = 0
+	MedicationFrequency(frequency: $frequency)
 }

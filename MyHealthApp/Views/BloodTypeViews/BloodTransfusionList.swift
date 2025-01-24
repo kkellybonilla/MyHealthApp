@@ -13,10 +13,6 @@ struct BloodTransfusionList: View {
 	
 	@Environment(\.dismiss) var dismiss
 	
-	/*
-	 Text("Unfortunately, there are no patients that have compatible blood types with \(patient.firstName).").font(.subheadline).foregroundStyle(.secondary)
-	 */
-	
     var body: some View {
 		let compatibleBloodTypes = patient.bloodType.compatibleBloodTypes
 		let compatiblePatients = patientList.patients.filter {
