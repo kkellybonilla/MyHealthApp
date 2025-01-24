@@ -96,12 +96,13 @@ struct Patient: Identifiable, Hashable {
 		var currentMedicationNames: Set<String> = []
 		for medication in self.medications {
 			if self.isCurrentlyTaking(medication) {
-				currentMedicationNames.insert(medication.name)
+				currentMedicationNames.insert(medication.name.lowercased())
 			}
 		}
 		
 		/// Avoid prescribing duplicate medications
-		if currentMedicationNames.contains(medication.name) {
+		let normalizedMedication = medication.name.lowercased()
+		if currentMedicationNames.contains(normalizedMedication) {
             throw PatientError.duplicateMedication
         }
         

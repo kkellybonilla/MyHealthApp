@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct PatientDetailButton: View {
-	@Binding var isShowing: Bool
+	@Binding var activeSheet: PatientDetailSheet?
+	var sheetType: PatientDetailSheet
 	var buttonText: String
 	var buttonIcon: String
 	var buttonTint: Color
 	
     var body: some View {
 		Button(action: {
-			isShowing.toggle()
+			if activeSheet == nil {
+				activeSheet = sheetType
+			}
 		}) {
 			HStack(content: {
 				Text(buttonText)
@@ -33,8 +36,10 @@ struct PatientDetailButton: View {
 }
 
 #Preview {
+	@Previewable @State var activeSheet: PatientDetailSheet? = nil
 	PatientDetailButton(
-		isShowing: .constant(false),
+		activeSheet: $activeSheet,
+		sheetType: .prescribeMedicationForm,
 		buttonText: "Button Text",
 		buttonIcon: "circle",
 		buttonTint: .black

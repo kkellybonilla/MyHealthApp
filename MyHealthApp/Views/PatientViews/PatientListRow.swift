@@ -8,21 +8,23 @@
 import SwiftUI
 
 struct PatientListRow: View {
-	let patient: Patient
+	@Bindable var patientList: PatientManager
+	@Binding var patient: Patient
 
 		var body: some View {
-			NavigationLink {
-				PatientDetail(patient: patient)
-			} label: {
-				PatientRow(patient: patient)
-			}
+			NavigationLink(destination: {
+				PatientDetail(patientList: patientList, patient: $patient)
+			}, label: {
+				PatientRow(patient: $patient)
+			})
 			.listRowBackground(RoundedRectangle(cornerRadius: 30)
-				.fill(Color(.green.opacity(0.5)))
+				.fill(.green.opacity(0.5))
 				.padding([.top, .bottom], 2)
 			)
 		}
 }
 
 #Preview {
-	PatientListRow(patient: patientData[0])
+	@Previewable @State var patient: Patient = patientData[0]
+	PatientListRow(patientList: PatientManager(patients: patientData), patient: $patient)
 }

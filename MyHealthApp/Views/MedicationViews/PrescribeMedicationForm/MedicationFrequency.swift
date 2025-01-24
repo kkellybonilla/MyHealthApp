@@ -13,10 +13,11 @@ struct MedicationFrequency: View {
     var body: some View {
 		HStack {
 			Text("Take")
+				.frame(minWidth: 0, maxWidth: 36)
 			TextField("Frequency", value: $frequency, format: .number)
 				.textFieldStyle(.roundedBorder)
 				.frame(maxWidth: 100)
-			Text("times a day")
+			Text("time(s) a day")
 		}
     }
 }

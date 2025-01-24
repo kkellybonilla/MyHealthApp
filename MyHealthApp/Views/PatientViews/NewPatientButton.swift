@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewPatientButton: View {
 	@Binding var isShowingNewPatientForm: Bool
+	@Bindable var patientList: PatientManager
 
     var body: some View {
 		Button(action: {
@@ -20,11 +21,12 @@ struct NewPatientButton: View {
 			})
 		}
 		.sheet(isPresented: $isShowingNewPatientForm, content: {
-			NewPatientForm()
+			NewPatientForm(patientList: patientList)
 		})
     }
 }
 
 #Preview {
-	NewPatientButton(isShowingNewPatientForm: .constant(false))
+	@Previewable @State var isShowingNewPatientForm: Bool = false
+	NewPatientButton(isShowingNewPatientForm: $isShowingNewPatientForm, patientList: PatientManager(patients: patientData))
 }

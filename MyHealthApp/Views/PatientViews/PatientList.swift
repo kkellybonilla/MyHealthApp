@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-// QUESTION - how to use @Observable for managing the patient list?
-
 struct PatientList: View {
+	@Bindable var patientList = PatientManager()
+	
 	@State private var isShowingNewPatientForm = false
 	@State private var searchText = ""
 	
 	var body: some View {
 		NavigationStack{
-			List(searchResults, id: \.self) { patient in
-				PatientListRow(patient: patient)
+			List(searchResults) { patientBinding in
+				PatientListRow(patientList: patientList, patient: patientBinding)
 			}
 			.navigationTitle("Patients")
 			.scrollContentBackground(.hidden)
@@ -25,28 +25,29 @@ struct PatientList: View {
 			}
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
-					NewPatientButton(isShowingNewPatientForm: $isShowingNewPatientForm)
+					NewPatientButton(isShowingNewPatientForm: $isShowingNewPatientForm, patientList: patientList)
 				}
 			}
 		}
 		.searchable(text: $searchText) {
-			ForEach(searchResults, id: \.self) { patient in
-				Text("Are you looking for \(patient.lastName), \(patient.firstName)?").searchCompletion(patient.lastName)
+			ForEach(searchResults) { patient in
+				Text("Are you looking for \(patient.wrappedValue.lastName), \(patient.wrappedValue.firstName)?").searchCompletion(patient.wrappedValue.lastName)
 			}
 		}
 		.accentColor(.green)
 	}
 	
-	var searchResults: [Patient] {
+	var searchResults: [Binding<Patient>] {
 		let normalizedSearchText = searchText.lowercased()
 		if normalizedSearchText.isEmpty {
-			return patientData.sorted { $0.lastName < $1.lastName}
+			return $patientList.patients.sorted { $0.wrappedValue.lastName < $1.wrappedValue.lastName}
 		} else {
-			return patientData.filter { $0.lastName.lowercased().contains(normalizedSearchText) }
+			return $patientList.patients.filter { $0.wrappedValue.lastName.lowercased().contains(normalizedSearchText)
+			}
 		}
 	}
 }
 
 #Preview {
-    PatientList()
+	PatientList(patientList: PatientManager(patients: patientData))
 }

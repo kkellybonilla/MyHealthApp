@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PatientRow: View {
-	var patient: Patient
+	@Binding var patient: Patient
 	
     var body: some View {
 		HStack {
@@ -27,7 +27,6 @@ struct PatientRow: View {
 }
 
 #Preview {
-	Group {
-		PatientRow(patient: patientData[0])
-	}
+	@Previewable @State var patient = patientData[0]
+	PatientRow(patient: $patient)
 }

@@ -26,15 +26,21 @@ struct MedicationTests {
 			frequency: 1,
 			duration: 90)
 		
+		let simpleDescription = metoprolol.description
+			.split(separator: "\n", maxSplits: 1, omittingEmptySubsequences: false)
+		let simpleDescriptionWithoutUUID = "id: MOCKED_UUID\n" + (
+			simpleDescription.count > 1 ? simpleDescription[1] : "")
+		
 		let expectedDescription = """
-			(datePrescribed: 2025-01-07 08:00:00 +0000
+			id: MOCKED_UUID
+			datePrescribed: 2025-01-07 08:00:00 +0000
 			name: Metoprolol
 			dose: 25.0 mg
 			route: by mouth
 			frequency: 1
-			duration: 90)
+			duration: 90\n
 			"""
 		
-		#expect(expectedDescription == metoprolol.description)
+		#expect(expectedDescription == simpleDescriptionWithoutUUID)
 	}
 }

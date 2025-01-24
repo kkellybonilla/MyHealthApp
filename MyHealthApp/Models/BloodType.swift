@@ -24,8 +24,7 @@ enum BloodType: String, CaseIterable {
         .bNegative: [.bNegative, .oNegative],
         .oPositive: [.oPositive, .oNegative],
         .oNegative: [.oNegative],
-        .abPositive: [.aPositive, .aNegative, .bPositive, .bNegative, .oPositive, .oNegative,
-                      .abPositive, .abNegative],
+		.abPositive: Set(BloodType.allCases),
         .abNegative: [.aNegative, .bNegative, .oNegative, .abNegative]
     ]
     

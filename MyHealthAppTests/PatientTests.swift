@@ -31,19 +31,29 @@ import Testing
 	
 	@Test("Returns readable patient description") func testPatientDescription() {
 		let simpleDescription = john.description
-			.split(separator: "\n", maxSplits: 1, omittingEmptySubsequences: false)
-		let simpleDescriptionWithoutUUID = "(medicalRecordNumber: MOCKED_UUID\n" + (
-			simpleDescription.count > 1 ? simpleDescription[1] : "")
+			.split(separator: "\n", maxSplits: 2, omittingEmptySubsequences: false)
+		var simpleDescriptionWithoutUUID = ""
+		if simpleDescription.count > 0 {
+			simpleDescriptionWithoutUUID += "id: MOCKED_UUID\n"
+		}
+		if simpleDescription.count > 1 {
+			simpleDescriptionWithoutUUID += "medicalRecordNumber: MOCKED_UUID\n"
+		}
+
+		// Append the rest of the description if there are more lines
+		if simpleDescription.count > 2 {
+			simpleDescriptionWithoutUUID += simpleDescription.dropFirst(2).joined(separator: "\n")
+		}
 		let expectedDescription = """
-			(medicalRecordNumber: MOCKED_UUID
+			id: MOCKED_UUID
+			medicalRecordNumber: MOCKED_UUID
 			firstName: John
 			lastName: Doe
 			dateOfBirth: 2000-01-01 08:00:00 +0000
 			height: 6.0 ft
 			weight: 200.0 lb
 			bloodType: B-
-			medications: []
-			age: 25)
+			medications: []\n
 			"""
 		#expect(simpleDescriptionWithoutUUID == expectedDescription)
 	}

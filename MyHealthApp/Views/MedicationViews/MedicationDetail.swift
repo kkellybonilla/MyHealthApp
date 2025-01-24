@@ -11,8 +11,10 @@ struct MedicationDetail: View {
 	var medication: Medication
 	
     var body: some View {
-		VStack {
+		NavigationStack {
 			Text(medication.name)
+			Text("Ran out of time to implement :'(")
+				.foregroundStyle(.secondary)
 		}
     }
 }

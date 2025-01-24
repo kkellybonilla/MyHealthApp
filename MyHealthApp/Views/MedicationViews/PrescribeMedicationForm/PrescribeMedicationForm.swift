@@ -16,6 +16,9 @@ struct PrescribeMedicationForm: View {
 	@State private var frequency: Int = 0
 	@State private var duration: Int = 0
 	@State private var datePrescribed: Date = DateFactory.now
+	@State private var isShowingErrorAlert = false
+	
+	@Binding var patient: Patient
 	
 	@Environment(\.dismiss) var dismiss
 	
@@ -24,14 +27,15 @@ struct PrescribeMedicationForm: View {
 			Form {
 				Section {
 					TextField("Enter Medication Name", text: $medicationName)
-					
 					MedicationDose(doseValue: $doseValue, doseUnit: $doseUnit)
-					
 					TextField("Enter Medication Route", text: $route)
-					
 					MedicationFrequency(frequency: $frequency)
 					MedicationDuration(duration: $duration)
 				}
+				.listRowBackground(Color.clear)
+			}
+			.background {
+				Color(.green.opacity(0.1)).edgesIgnoringSafeArea(.all)
 			}
 			.navigationTitle("Prescribe Medication")
 			.onTapGesture {
@@ -46,11 +50,19 @@ struct PrescribeMedicationForm: View {
 						Text("Cancel")
 					}
 					
-					// QUESTION - i try to prescribe medication, but not able to since only way i know how is to pass in patient but cant mutate patient if part of struct since self is immutable. how do i do this then?
 					Button(action: {
-						print("tries to prescribe medication")
+						do {
+							try tryPrescribeMedication()
+						} catch {
+							print("Error meep: \(error)")
+						}
 					}) {
 						Text("Prescribe")
+					}
+					.alert("Cannot Prescribe Duplicate Medications", isPresented: $isShowingErrorAlert) {
+						
+					} message: {
+						Text("The medication \(medicationName) is already currently prescribed to this patient.")
 					}
 					.disabled(disableForm)
 				}
@@ -63,25 +75,30 @@ struct PrescribeMedicationForm: View {
 		medicationName.isEmpty || doseValue == 0 || route.isEmpty || frequency == 0 || duration == 0
 	}
 	
-	mutating func tryPrescribeMedication() throws {
-//		let medication = Medication(
-//			datePrescribed: <#T##Date#>,
-//			name: <#T##String#>,
-//			dose: <#T##Measurement<UnitMass>#>,
-//			route: <#T##String#>,
-//			frequency: <#T##Int#>,
-//			duration: <#T##Int#>
-//		)
-//		
-//		do {
-//			try patient.prescribeMedication(medication)
-//		} catch {
-//			// TODO - show error message
-//			print("Error prescribing medication: \(error)")
-//		}
+	func tryPrescribeMedication() throws {
+		let doseUnitsMap: [String: UnitMass] = ["kilograms": .kilograms, "grams": .grams, "milligrams": .milligrams, "micrograms": .micrograms]
+		var doseUnitMass: UnitMass {
+			doseUnitsMap[doseUnit]!
+		}
+		
+		let medication = Medication(
+			datePrescribed: DateFactory.now,
+			name: medicationName,
+			dose: Measurement(value: doseValue, unit: doseUnitMass),
+			route: route,
+			frequency: frequency,
+			duration: duration)
+		
+		do {
+			try patient.prescribeMedication(medication)
+			dismiss()
+		} catch {
+			isShowingErrorAlert = true
+		}
 	}
 }
 
 #Preview {
-	PrescribeMedicationForm()
+	@Previewable @State var patient = patientData[0]
+	PrescribeMedicationForm(patient: $patient)
 }

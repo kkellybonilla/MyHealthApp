@@ -16,7 +16,8 @@ struct MedicationDose: View {
     var body: some View {
 		HStack {
 			Text("Enter Dose: ")
-			TextField("", value: $doseValue, format: .number)
+			TextField("Dosage", value: $doseValue, format: .number)
+				.textFieldStyle(.roundedBorder)
 				.frame(minWidth: 0, maxWidth: 35)
 			Picker("", selection: $doseUnit) {
 				ForEach(doseUnits, id: \.self) {

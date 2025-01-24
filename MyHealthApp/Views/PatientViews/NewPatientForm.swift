@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct NewPatientForm: View {
+	@Bindable var patientList: PatientManager
+	
 	// required
 	@State private var firstName: String = ""
 	@State private var lastName: String = ""
 	@State private var dateOfBirth: Date = DateFactory.now
 	@State private var heightValue: Double = 5.11
 	@State private var weightValue: Double = 160.0
-	@State private var bloodType: BloodType = .aPositive
 	
 	// optional
-	//	@State private var bloodType: BloodType
-	
+	@State private var bloodType: BloodType = .aPositive
+
 	@Environment(\.dismiss) var dismiss
 	
 	var body: some View {
@@ -51,6 +52,7 @@ struct NewPatientForm: View {
 						Text("lbs")
 					}
 				}
+				.listRowBackground(Color.clear)
 				
 				Section(header: Text("Optional Patient Information")) {
 					HStack {
@@ -64,12 +66,16 @@ struct NewPatientForm: View {
 						.padding(.vertical, -50)
 					}
 				}
+				.listRowBackground(Color.clear)
 			}
 			.navigationTitle("New Patient")
 			.onTapGesture {
 				hideKeyboard()
 			}
 			.scrollContentBackground(.hidden)
+			.background {
+				Color(.green.opacity(0.1)).edgesIgnoringSafeArea(.all)
+			}
 			.toolbar {
 				ToolbarItemGroup(placement: .navigationBarTrailing) {
 					Button(action: {
@@ -94,7 +100,6 @@ struct NewPatientForm: View {
 		firstName.isEmpty || lastName.isEmpty || heightValue == 0 || weightValue == 0 || dateOfBirth > DateFactory.now
 	}
 
-	// QUESTION - why not yelling @ me for not being marked as mutating when mutating?
 	func savePatient() {
 		let newPatient = Patient(
 			firstName: firstName,
@@ -106,12 +111,13 @@ struct NewPatientForm: View {
 			medications: []
 		)
 		
-		patientData.append(newPatient)
+		patientList.addPatient(newPatient)
+		dismiss()
 	}
 }
 
 #Preview {
-    NewPatientForm()
+	NewPatientForm(patientList: PatientManager(patients: patientData))
 }
 
 #if canImport(UIKit)
