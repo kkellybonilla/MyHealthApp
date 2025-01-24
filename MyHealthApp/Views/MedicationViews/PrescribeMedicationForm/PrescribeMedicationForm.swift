@@ -44,10 +44,8 @@ struct PrescribeMedicationForm: View {
 			.scrollContentBackground(.hidden)
 			.toolbar {
 				ToolbarItemGroup(placement: .navigationBarTrailing) {
-					Button(action: {
+					CancelButton {
 						dismiss()
-					}) {
-						Text("Cancel")
 					}
 					
 					Button(action: {

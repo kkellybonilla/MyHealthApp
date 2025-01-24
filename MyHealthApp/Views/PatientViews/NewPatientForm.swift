@@ -75,10 +75,8 @@ struct NewPatientForm: View {
 			}
 			.toolbar {
 				ToolbarItemGroup(placement: .navigationBarTrailing) {
-					Button(action: {
+					CancelButton {
 						dismiss()
-					}) {
-						Text("Cancel")
 					}
 					
 					Button(action: {

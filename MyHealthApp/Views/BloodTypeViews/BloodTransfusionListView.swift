@@ -26,10 +26,8 @@ struct BloodTransfusionListView: View {
 			.scrollContentBackground(.hidden)
 			.toolbar {
 				ToolbarItem(content: {
-					Button(action: {
+					CancelButton {
 						dismiss()
-					}) {
-						Text("Cancel")
 					}
 				})
 			}
