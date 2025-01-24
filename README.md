@@ -16,6 +16,7 @@ MyHealthApp supports the following functionality:
 - Prescribing patients new medications, while avodiing duplicating medications the patient is currently taking
 
 ## Demo
+<img src="MyHealthAppDemo.gif" width="500">
 
 ---
 
